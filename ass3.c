@@ -21,7 +21,7 @@ void main()
 {
   FILE *fp;
   char config[52][5];
-  char cards[26][3];
+  char cards[26][4];
   
   int index;
   int character;
@@ -57,7 +57,6 @@ void main()
   {
     printf("%s\n", cards[index]);
   }
-  
   
 
   fclose(fp);
