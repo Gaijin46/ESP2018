@@ -49,14 +49,10 @@ void main()
   for(index = 0; index < 26; index++)
   {	  
     cards[index][0] = config[(index*2)][0];
-	cards[index][1] = "\0";
+	cards[index][1] = 0;
     strcat(cards[index], config[((index*2)+1)]); 
   }
-  for(index = 0; index < 52; index++)
-  {
-    printf("%s\n", config[index]);
-  }
-  
+
   for(index = 0; index < 26; index++)
   {
     printf("%s\n", cards[index]);
