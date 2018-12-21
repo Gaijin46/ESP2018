@@ -4,7 +4,7 @@
 // This program encrypts plain text. It it cycles each letter of the input
 // through the english alphabet, using the modulo of 256 divided 
 // by the input strings' length.
-// Blabla
+// 
 // 
 // Group: Group 02, study assistant Martin Ferdinand Haubenwallner
 //
@@ -17,9 +17,4 @@
 #include <stdlib.h>
 #include <string.h>
 
-jsdfsdf
-
-SDF
-SDF
-SDf
 
