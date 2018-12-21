@@ -4,12 +4,12 @@
 // This program encrypts plain text. It it cycles each letter of the input
 // through the english alphabet, using the modulo of 256 divided 
 // by the input strings' length.
-// In this code, this number is called the 'key'.
+// Blabla
 // 
 // Group: Group 02, study assistant Martin Ferdinand Haubenwallner
 //
 // Authors: Philipp Bardakji 11701628
-// Kenan Mujic 11771967
+//          Kenan Mujic 11771967
 //-----------------------------------------------------------------------------
 //
 
@@ -17,4 +17,13 @@
 #include <stdlib.h>
 #include <string.h>
 
+jsdfsdf
+
+SDF
+SDF
+SDf
+SDF
+SD
+FS
+DF
 
