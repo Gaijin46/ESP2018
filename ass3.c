@@ -22,8 +22,4 @@ jsdfsdf
 SDF
 SDF
 SDf
-SDF
-SD
-FS
-DF
 
