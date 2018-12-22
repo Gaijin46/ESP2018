@@ -16,12 +16,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-typedef struct _Card_
-{
-  char color_;
-  char value_;
-}Card;
+#include<malloc.h>
 
 typedef enum _CardValue_
 {
@@ -30,6 +25,36 @@ typedef enum _CardValue_
   Q = 12,
   K = 13
 } CardValue;
+
+struct node {
+    char* card;
+    struct node *next;
+};
+struct node *head;
+
+void copy(char array[][4])                         //copying array elements and create linked list
+{
+  struct node*temp = malloc(sizeof(struct node));
+  temp -> card = array[0];
+  temp -> next = NULL;
+  head = temp;
+  int i;
+  for(i = 0; i < 26; i++)
+  {
+      struct node* temp2 = malloc(sizeof(struct node));
+      temp -> next= temp2;
+      temp2 -> card = array[i];
+      temp2 -> next = NULL;
+      temp = temp2;
+  }
+	 
+	while(temp != NULL)
+    {
+      printf("%s\n",temp -> card);
+      temp = temp -> next;
+
+    }
+}
 
 int main(int argc, char* argv[])
 {
@@ -62,24 +87,20 @@ int main(int argc, char* argv[])
   if(read != 1)
     printf("[ERR] Invalid file!\n");
   else
-  {
+  {	
     for(index = 0; index < 26; index++)
-    {
-      struct Card(index);
-      Card.color(index) = config[(index*2)][0];
-	  Card.value(index) = config[((index*2)+1)];
-	}
-    //for(index = 0; index < 26; index++)
-    //{	  
-      //cards[index][0] = config[(index*2)][0];
-	  //cards[index][1] = 0;
-      //strcat(cards[index], config[((index*2)+1)]);
-    //}
+    {	  
+      cards[index][0] = config[(index*2)][0];
+	  cards[index][1] = 0;
+      strcat(cards[index], config[((index*2)+1)]);
+    }
   
     //for(index = 0; index < 26; index++)
     //{
       //printf("%s\n", cards[index]);
     //}
+	
+	copy(cards);
   }
   
   fclose(file);
