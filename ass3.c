@@ -18,24 +18,57 @@
 #include <string.h>
 #include<malloc.h>
 
-typedef enum _CardValue_
-{
-  A = 1,
-  J = 11,
-  Q = 12,
-  K = 13
-} CardValue;
+#include<stdio.h>
+#include<stdlib.h>
+#include<malloc.h>
+#define ELEMENTS  4
 
-struct _DrawStack_ {
+struct node {
     char* card;
-    struct DrawStack *next;
-}DrawStack;
-struct DrawStack draw;
+    struct node *next;
+};
+struct node *head;
 
+//void insert(int x) 
+//{
+    //struct node *temp = malloc(sizeof(struct node));
+    //temp->card = x;
+    //temp->next = NULL;
 
-void distributeCards(char array[26][4])                         //copying array elements and create linked list
+    //if (head != NULL)
+        //temp->next = head;
+    //head = temp;
+//}
+
+void copy(char array[][4])                         //copying array elements and create linked list
 {
+  struct node*temp = malloc(sizeof(struct node));
+  temp -> card = array[1];
+  temp -> next = NULL;
+  head = temp;
+  int i;
   
+  for(i = 0; i < 26; i++)
+  {
+    struct node*temp2 = malloc(sizeof(struct node));
+    temp -> next= temp2;
+    temp2 -> card = array[i];
+    temp2 -> next = NULL;
+    temp = temp2;
+  }  
+}
+
+void printlist() {
+    struct node *temp = head;
+    printf("List is : \n");
+
+    while(temp != NULL)
+    {
+      printf(" %s \n",temp -> card);
+      temp = temp -> next;
+
+    }
+    printf("\n");
 }
 
 int main(int argc, char* argv[])
@@ -82,7 +115,8 @@ int main(int argc, char* argv[])
       //printf("%s\n", cards[index]);
     //}
 	
-	distributeCards(cards);
+	copy(cards);
+    printlist();
   }
   
 
