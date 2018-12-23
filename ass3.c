@@ -26,34 +26,33 @@ typedef enum _CardValue_
   K = 13
 } CardValue;
 
-struct node {
+struct stack {
     char* card;
-    struct node *next;
+    struct stack *next;
 };
-struct node *head;
-
-void copy(char array[][4])                         //copying array elements and create linked list
+struct stack *stack1;
+struct stack *stack2;
+void distributeCards(char array[][4])                         //copying array elements and create linked list
 {
-  struct node*temp = malloc(sizeof(struct node));
+  struct stack*temp = malloc(sizeof(struct stack));
   temp -> card = array[0];
   temp -> next = NULL;
-  head = temp;
+  stack1 = temp;
   int i;
   for(i = 0; i < 26; i++)
   {
-      struct node* temp2 = malloc(sizeof(struct node));
+      struct stack* temp2 = malloc(sizeof(struct stack));
       temp -> next= temp2;
       temp2 -> card = array[i];
       temp2 -> next = NULL;
       temp = temp2;
   }
 	 
-	while(temp != NULL)
-    {
-      printf("%s\n",temp -> card);
-      temp = temp -> next;
-
-    }
+  while(temp != NULL)
+  {
+    printf("%s\n",temp -> card);
+    temp = temp -> next;
+  }
 }
 
 int main(int argc, char* argv[])
@@ -81,7 +80,7 @@ int main(int argc, char* argv[])
   }
   for(index = 0; index < 52; index++)
   {
-    read = fscanf(file, "%s[]", &config[index]);
+    read = fscanf(file, "%s", &config[index]);
   }
 
   if(read != 1)
@@ -100,8 +99,9 @@ int main(int argc, char* argv[])
       //printf("%s\n", cards[index]);
     //}
 	
-	copy(cards);
+	distributeCards(cards);
   }
   
+
   fclose(file);
 }
