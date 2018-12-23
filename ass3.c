@@ -1,260 +1,401 @@
 //-----------------------------------------------------------------------------
-// ass1.c
+// ass3.c
 //
-// Template program for ESP Assignment 1 WS18
-//
-// Group: Group 02, study assistant <Name of Study assistant>
+// This program encrypts plain text. It it cycles each letter of the input
+// through the english alphabet, using the modulo of 256 divided 
+// by the input strings' length.
+// 
+// 
+// Group: Group 02, study assistant Martin Haubenwallner
 //
 // Authors: Philipp Bardakji 11701628
+//          Kenan Mujic 11771967
 //-----------------------------------------------------------------------------
 //
+
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include<malloc.h>
 
-//Struct defines values which are read from the config file
-typedef struct _InitValues_
+struct _List_ {
+  char* card_;
+  struct _List_ * next_;
+  struct _List_ * prev_;
+};
+struct _List_ * draw_;
+struct _List_ * stack_1_;
+struct _List_ * stack_2_;
+struct _List_ * stack_3_;
+struct _List_ * stack_4_;
+struct _List_ * deposit_1_;
+struct _List_ * deposit_2_;
+
+void printlist()
 {
-  int a;
-  int b;
-  int c;
-  int d;
-} InitValues;
-
-//Return values of the program
-typedef enum _ReturnValue_
-{
-  EVERYTHING_OK = 0,
-  INVALID_ARG_COUNT_2 = -1,
-  INVALID_ARG_COUNT_3 = -2,
-  FILE_NOT_FOUND = -3,
-  INVALID_FILE = -4,
-  INVALID_MATRIKEL_NUMBER = -5
-} ReturnValue;
-
-
-//forward declarations
-void function(int, int, int, int);
-ReturnValue printErrorMessage(ReturnValue return_value);
-ReturnValue readSingleValue(FILE* file, int* value);
-ReturnValue readInitValuesFromFile(FILE* file, InitValues* init_values);
-ReturnValue readInitValuesFromPath(const char* path, InitValues* init_values);
-
-//------------------------------------------------------------------------------
-///
-/// Entry function of the program for ass1
-///
-/// @param argc number of arguments
-/// @param argv program arguments
-///
-/// @return value of ReturnValue which defines type of error
-//
-int main(int argc, char* argv[])
-{
-  if(argc != 2)
+  printf("List is : \n");
+  
+  while(draw_ != NULL)
   {
-    return printErrorMessage(INVALID_ARG_COUNT_2);
+    printf(" %s \n",draw_ -> card_);
+    draw_ = draw_ -> next_;
   }
-
-  InitValues init_values = {0, 0, 0, 0};
-  ReturnValue return_value = readInitValuesFromPath(argv[1], &init_values);
-  if(return_value != EVERYTHING_OK)
-  {
-    return printErrorMessage(return_value);
-  }
-
-  function(init_values.a, init_values.b, init_values.c, init_values.d);
-
-  return 0;
+ printf("\n");
 }
 
-//------------------------------------------------------------------------------
-///
-/// Print message which describes the return value.
-///
-/// @param return_value type of main return value
-///
-/// @return parameter return_value
-//
-ReturnValue printErrorMessage(ReturnValue return_value)
+void table()
 {
-  switch(return_value)
+  printf("0   | 1   | 2   | 3   | 4   | DEP | DEP\n");
+  printf("---------------------------------------\n");
+  int i = 0;
+  //for(i = 16; i > 0; i--);
+  while( i < 16)
   {
-    case INVALID_ARG_COUNT_2:
-      printf("[ERR] Wrong number of parameters. Usage ./ass1 <config-file>\n");
-      break;
-    case INVALID_ARG_COUNT_3:
-      printf(
-        "[ERR] Wrong number of parameters. Usage ./ass1 <config-file> <matrikel-number>\n");
-      break;
-    case INVALID_FILE:
-      printf("[ERR] Config-File is invalid.\n");
-      break;
-    case FILE_NOT_FOUND:
-      printf("[ERR] Config-File does not exist or is not readable.\n");
-      break;
-    case INVALID_MATRIKEL_NUMBER:
-      printf("[ERR] Matrikel-Number is invalid.\n");
-      break;
-    case EVERYTHING_OK:
-      //left blank intentionally
-      break;
+	if(draw_ != NULL)
+	{
+      if(draw_ -> prev_ == NULL)
+	  {
+	    if(strcmp(draw_ -> card_, "B10") && strcmp(draw_ -> card_, "R10"))
+          printf("%s  |", draw_ -> card_);
+        else
+	      printf("%s |", draw_ -> card_);
+	  }
+	  else
+	    printf("X   |");
+  
+      draw_ = draw_ -> next_;
+    }
+	else
+	  printf("    |");
+	
+	if(stack_1_ != NULL)
+	{
+	  if(strcmp(stack_1_ -> card_, "B10") && strcmp(stack_1_ -> card_, "R10"))
+        printf(" %s  |", stack_1_ -> card_);
+      else
+	    printf(" %s |", stack_1_ -> card_);
+	  stack_1_ = stack_1_ -> next_;
+	}
+	else
+	  printf("     |");
+  
+    if(stack_2_ != NULL)
+	{
+	  if(strcmp(stack_2_ -> card_, "B10") && strcmp(stack_2_ -> card_, "R10"))
+        printf(" %s  |", stack_2_ -> card_);
+      else
+	    printf(" %s |", stack_2_ -> card_);
+	  stack_2_ = stack_2_ -> next_;
+	}
+	else
+	  printf("     |");
+	
+	if(stack_3_ != NULL)
+	{
+	  if(strcmp(stack_3_ -> card_, "B10") && strcmp(stack_3_ -> card_, "R10"))
+        printf(" %s  |", stack_3_ -> card_);
+      else
+	    printf(" %s |", stack_3_ -> card_);
+	  stack_3_ = stack_3_ -> next_;
+	}
+	else
+	  printf("     |");
+  
+    if(stack_4_ != NULL)
+	{
+	  if(strcmp(stack_4_ -> card_, "B10") && strcmp(stack_4_ -> card_, "R10"))
+        printf(" %s  |", stack_4_ -> card_);
+      else
+	    printf(" %s |", stack_4_ -> card_);
+	  stack_4_ = stack_4_ -> next_;
+	}
+	else
+	  printf("     |");
+  
+    if(deposit_1_ != NULL)
+	{
+	  if(strcmp(deposit_1_ -> card_, "B10") && strcmp(deposit_1_ -> card_, "R10"))
+        printf(" %s  |", deposit_1_ -> card_);
+      else
+	    printf(" %s |", deposit_1_ -> card_);
+	  deposit_1_ = deposit_1_ -> next_;
+	}
+	else
+	  printf("     |");
+  
+    if(deposit_2_ != NULL)
+	{
+	  if(strcmp(deposit_2_ -> card_, "B10") && strcmp(deposit_2_ -> card_, "R10"))
+        printf(" %s  \n", deposit_2_ -> card_);
+      else
+	    printf(" %s \n", deposit_2_ -> card_);
+	  deposit_2_ = deposit_2_ -> next_;
+	}
+	else
+	  printf("     \n");
+	i++;
   }
-  return return_value;
+  
+  // printf("X   |");
+  // printf(" %s  | %s  | BJ  | B10 |     |    \n", stack_1_ -> card_, stack_2_ -> card_);
 }
 
-//------------------------------------------------------------------------------
-///
-/// read int as string followed by \n from file
-///
-/// @param file pointer to file to read from
-/// @param value pointer to store read value
-///
-/// @return type of error. 0 if success
-//
-ReturnValue readSingleValue(FILE* file, int* value)
+void distribute(char array[][4])
 {
-  char str[10];
-  int read = fscanf(file, "%s\n", str);
-  if(read != 1)
-  {
-    return INVALID_FILE;
-  }
-
-  *value = (int)strtol(str, NULL, 10);
-  return EVERYTHING_OK;
+  struct _List_ * card_1_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_2_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_3_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_4_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_5_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_6_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_7_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_8_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_9_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_10_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_11_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_12_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_13_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_14_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_15_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_16_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_17_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_18_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_19_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_20_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_21_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_22_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_23_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_24_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_25_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_26_ = malloc(sizeof(struct _List_));
+  
+  int i = 0;
+  
+  card_1_ -> card_ = array[i];
+  card_1_ -> prev_ = stack_1_;
+  card_1_ -> next_ = NULL;
+  i++;
+  
+  card_2_ -> card_ = array[i];
+  card_2_ -> prev_ = stack_2_;
+  card_2_ -> next_ = card_5_;
+  i++;
+  
+  card_3_ -> card_ = array[i];
+  card_3_ -> next_ = card_6_;
+  card_3_ -> prev_ = stack_3_;
+  i++;
+  
+  card_4_ -> card_ = array[i];
+  card_4_ -> next_ = card_7_;
+  card_4_ -> prev_ = stack_4_;
+  i++;
+  
+  card_5_ -> card_ = array[i];
+  card_5_ -> next_ = NULL;
+  card_5_ -> prev_ = card_2_;
+  i++;
+  
+  card_6_ -> card_ = array[i];
+  card_6_ -> next_ = card_8_;
+  card_6_ -> prev_ = card_3_;
+  i++;
+  
+  card_7_ -> card_ = array[i];
+  card_7_ -> next_ = card_9_;
+  card_7_ -> prev_ = card_4_;
+  i++;
+  
+  card_8_ -> card_ = array[i];
+  card_8_ -> next_ = NULL;
+  card_8_ -> prev_ = card_6_;
+  i++;
+  
+  card_9_ -> card_ = array[i];
+  card_9_ -> next_ = card_10_;
+  card_9_ -> prev_ = card_7_;
+  i++;
+  
+  card_10_ -> card_ = array[i];
+  card_10_ -> next_ = NULL;
+  card_10_ -> prev_ = card_9_;
+  i++;
+  
+  card_11_ -> card_ = array[i];
+  card_11_ -> next_ = card_12_;
+  card_11_ -> prev_ = draw_;
+  i++;
+  
+  card_12_ -> card_ = array[i];
+  card_12_ -> next_ = card_13_;
+  card_12_ -> prev_ = card_11_;
+  i++;
+  
+  card_13_ -> card_ = array[i];
+  card_13_ -> next_ = card_14_;
+  card_13_ -> prev_ = card_12_;
+  i++;
+  
+  card_14_ -> card_ = array[i];
+  card_14_ -> next_ = card_15_;
+  card_14_ -> prev_ = card_13_;
+  i++;
+  
+  card_15_ -> card_ = array[i];
+  card_15_ -> next_ = card_16_;
+  card_15_ -> prev_ = card_14_;
+  i++;
+  
+  card_16_ -> card_ = array[i];
+  card_16_ -> next_ = card_17_;
+  card_16_ -> prev_ = card_15_;
+  i++;
+  
+  card_17_ -> card_ = array[i];
+  card_17_ -> next_ = card_18_;
+  card_17_ -> prev_ = card_16_;
+  i++;
+  
+  card_18_ -> card_ = array[i];
+  card_18_ -> next_ = card_19_;
+  card_18_ -> prev_ = card_17_;
+  i++;
+  
+  card_19_ -> card_ = array[i];
+  card_19_ -> next_ = card_20_;
+  card_19_ -> prev_ = card_18_;
+  i++;
+  
+  card_20_ -> card_ = array[i];
+  card_20_ -> next_ = card_21_;
+  card_20_ -> prev_ = card_19_;
+  i++;
+  
+  card_21_ -> card_ = array[i];
+  card_21_ -> next_ = card_22_;
+  card_21_ -> prev_ = card_20_;
+  i++;
+  
+  card_22_ -> card_ = array[i];
+  card_22_ -> next_ = card_23_;
+  card_22_ -> prev_ = card_21_;
+  i++;
+  
+  card_23_ -> card_ = array[i];
+  card_23_ -> next_ = card_24_;
+  card_23_ -> prev_ = card_22_;
+  i++;
+  
+  card_24_ -> card_ = array[i];
+  card_24_ -> next_ = card_25_;
+  card_24_ -> prev_ = card_23_;
+  i++;
+  
+  card_25_ -> card_ = array[i];
+  card_25_ -> next_ = card_26_;
+  card_25_ -> prev_ = card_24_;
+  i++;
+  
+  card_26_ -> card_ = array[i];
+  card_26_ -> next_ = NULL;
+  card_26_ -> prev_ = card_25_;
+  i++;
+  
+  draw_ = card_11_;
+  stack_1_ = card_1_;
+  stack_2_ = card_2_;
+  stack_3_ = card_3_;
+  stack_4_ = card_4_;
+  deposit_1_ = NULL;
+  deposit_2_ = NULL;
+  //printlist();
+  table();
 }
 
-//------------------------------------------------------------------------------
-///
-/// Read Initial values from file
-///
-/// @param file file to read from
-/// @param init_values struct to save read variables to
-///
-/// @return error type. 0 if success
-//
-ReturnValue readInitValuesFromFile(FILE* file, InitValues* init_values)
+void moveCard()
 {
-  int* variables[4] =
-    {&init_values->a, &init_values->b, &init_values->c, &init_values->d};
+  	
+}
 
-  for(int variable_iterator = 0; variable_iterator < 4; variable_iterator++)
+void interpretUserInput()
+{
+  char input[25];
+  fgets(input, 25, stdin);
+  int i;
+  
+  char* segment1 = strtok(input, " ");
+
+  
+  if(strcmp(input, "help\n") == 0)
+  {	  
+    printf("possible command:\n");
+    printf("- move <color> <value> to <stacknumber>\n");
+    printf("- help\n");
+    printf("- exit\n");
+	input[0] = 0;
+	interpretUserInput();
+  }
+  else
   {
-    ReturnValue
-      return_value = readSingleValue(file, variables[variable_iterator]);
-    if(return_value != EVERYTHING_OK)
+	if(strcmp(input, "exit\n") == 0)
     {
-      return return_value;
+      return 0;
+	}
+	if(strcmp(segment1, "move") == 0)
+	{
+	  moveCard();	
+	}
+    else
+    {	
+      printf("[INFO] Invalid command!\n");
+      interpretUserInput();  
     }
   }
-
-  return EVERYTHING_OK;
+  
+  
 }
 
-//------------------------------------------------------------------------------
-///
-/// Read config values from path into struct
-///
-/// @param path relative path to file
-/// @param init_values struct to read values of file into
-///
-/// @return error type. 0 if success
-//
-ReturnValue readInitValuesFromPath(const char* path, InitValues* init_values)
+int main(int argc, char* argv[])
 {
-  FILE* file = fopen(path, "r");
+  FILE *file;
+  char config[52][5];
+  char cards[26][4];
+  int index;
+  int read;
+  
+  if(argc != 2)
+  {
+    printf("[ERR] Usage: ./ass3 [file-name]\n");
+    return 0;
+  }
+  
+  file = fopen(argv[1], "r");
+  //fread(&cardType, sizeof(struct _Card_), 1, file);
+  
   if(file == NULL)
   {
-    return FILE_NOT_FOUND;
+	printf("[ERR] could not read file!\n");
+    return 1;	
   }
-  ReturnValue read_return_value = readInitValuesFromFile(file, init_values);
-
+  for(index = 0; index < 52; index++)
+  {
+    read = fscanf(file, "%s", config[index]);
+  }
+  
   fclose(file);
-  return read_return_value;
-}
-
-//------------------------------------------------------------------------------
-///
-/// Function to be written by students. It calculates some values dependend on
-/// their matrikular number
-///
-/// @param a initial value a
-/// @param b initial value b
-/// @param c initial value c
-/// @param d initial value d
-///
-//
-void function(int a, int b, int c, int d)
-{
-  int result = 0;
-  // ----------------------------------------
-  // Beginn der Abgabe
-  // ----------------------------------------
   
-  if(a < 26)
-  {
-	while(b <= c)
-	{
-	  a += 2;
-	  b++;
-	  int sum = (b+c+d);
-	  sum = sum * 9;
-	  result = sum - 17;
-	  printf("%d %d %d %d\n", a, b, c, d);
-	  printf("%d\n",result);
-	  printf("--\n");
-	}
-  }
+  if(read != 1)
+    printf("[ERR] Invalid file!\n");
   else
-  {
-	while(a <= c)
-    {
-	  a += 2;
-	  b++;
-	  int sum = (b+c+d);
-	  sum = sum * 9;
-	  int result = sum - 17;
-	  printf("%d %d %d %d\n", a, b, c, d);
-	  printf("%d\n",result);
-	  printf("--\n");	
-	}
-  }
-  result = result * (a%2);
-  printf("%d %d %d %d\n", a, b, c, d);
-  printf("%d\n",result);
-  
-  // ----------------------------------------
-  // Ende der Abgabe
-  // ----------------------------------------
-}
-
- for(i = 1; i < 26; i++)
-  {
-    struct _DrawStack_*temp2 = malloc(sizeof(struct _DrawStack_));
-    temp -> next= temp2;
-    temp2 -> card = array[i];
-    temp2 -> next = NULL;
-    temp = temp2;
-  }
-  
-
-void copyToStack1(char array[][4], int i)                        //copying array elements and create linked list
-{
-  
-  struct _Stack1_*head_1 = malloc(sizeof(struct _Stack1_));
-  
-  if(head_1 -> next != NULL)
-  {
-    head_1 -> card = array[i];
-    head_1 -> next = NULL;
-  }
-  else
-  {
-    struct _Stack1_*node = malloc(sizeof(struct _Stack1_));
-    head_1 -> next= node;
-    node -> card = array[i];
-    node -> next = NULL;
-    head_1 = node;
+  {	
+    for(index = 0; index < 26; index++)
+    {	  
+      cards[index][0] = config[(index*2)][0];
+	  cards[index][1] = 0;
+      strcat(cards[index], config[((index*2)+1)]);
+    }
+  distribute(cards);
+  interpretUserInput();
   }
   
 }
