@@ -35,7 +35,25 @@ struct DrawStack draw;
 
 void distributeCards(char array[26][4])                         //copying array elements and create linked list
 {
-  
+  struct DrawStack*temp = malloc(sizeof(struct DrawStack));
+  temp -> card = array[0];
+  temp -> next = NULL;
+  draw = temp;
+  int i;
+  for(i = 0; i < 26; i++)
+  {
+      struct DrawStack* temp2 = malloc(sizeof(struct DrawStack));
+      temp -> next= temp2;
+      temp2 -> card = array[i];
+      temp2 -> next = NULL;
+      temp = temp2;
+  }
+	 
+  while(temp != NULL)
+  {
+    printf("%s\n",temp -> card);
+    temp = temp -> next;
+  }
 }
 
 int main(int argc, char* argv[])
