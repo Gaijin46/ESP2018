@@ -1,117 +1,260 @@
 //-----------------------------------------------------------------------------
-// ass3.c
+// ass1.c
 //
-// This program encrypts plain text. It it cycles each letter of the input
-// through the english alphabet, using the modulo of 256 divided 
-// by the input strings' length.
-// 
-// 
-// Group: Group 02, study assistant Martin Haubenwallner
+// Template program for ESP Assignment 1 WS18
+//
+// Group: Group 02, study assistant <Name of Study assistant>
 //
 // Authors: Philipp Bardakji 11701628
-//          Kenan Mujic 11771967
 //-----------------------------------------------------------------------------
 //
-
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include<malloc.h>
 
-struct _List_ {
-  char* card;
-  struct _List_ *next;
-};
-struct _List_*head_0;
-struct _List_*head_1;
-
-void printlist()
+//Struct defines values which are read from the config file
+typedef struct _InitValues_
 {
-  struct _List_*node_0 = head_0;
-  printf("List is : \n");
-  
-  while(node_0 != NULL)
-  {
-    printf(" %s \n",node_0 -> card);
-    node_0 = node_0 -> next;
-  }
- printf("\n");
-}
+  int a;
+  int b;
+  int c;
+  int d;
+} InitValues;
 
-void distribute()
+//Return values of the program
+typedef enum _ReturnValue_
 {
-  struct _List_*node_0 = head_1;
-  head_1 -> next = node_0;
-  node_0 -> next = NULL;
-  
-  while(head_1 != NULL)
-  {	  
-    printf(" %s \n", head_1 -> card);	
-    
-  }
-}
+  EVERYTHING_OK = 0,
+  INVALID_ARG_COUNT_2 = -1,
+  INVALID_ARG_COUNT_3 = -2,
+  FILE_NOT_FOUND = -3,
+  INVALID_FILE = -4,
+  INVALID_MATRIKEL_NUMBER = -5
+} ReturnValue;
 
-void copyToDrawStack(char array[][4])
-{
-  struct _List_*node_0 = malloc(sizeof(struct _List_));
-  node_0 -> card = array[0];
-  node_0 -> next = NULL;
-  head_0 = node_0;
-  int i;
-  for(i = 1; i < 26; i++)
-  {
-	struct _List_*node_1 = malloc(sizeof(struct _List_));
-	node_0 -> next = node_1;
-	node_1 -> card = array[i];
-    node_1 -> next = NULL;
-	node_0 = node_1;
-  }
-  head_1 = head_0;
-  //distribute();
-  printlist();
-  
-}
 
+//forward declarations
+void function(int, int, int, int);
+ReturnValue printErrorMessage(ReturnValue return_value);
+ReturnValue readSingleValue(FILE* file, int* value);
+ReturnValue readInitValuesFromFile(FILE* file, InitValues* init_values);
+ReturnValue readInitValuesFromPath(const char* path, InitValues* init_values);
+
+//------------------------------------------------------------------------------
+///
+/// Entry function of the program for ass1
+///
+/// @param argc number of arguments
+/// @param argv program arguments
+///
+/// @return value of ReturnValue which defines type of error
+//
 int main(int argc, char* argv[])
 {
-  FILE *file;
-  char config[52][5];
-  char cards[26][4];
-  int index;
-  int read;
-  
   if(argc != 2)
   {
-    printf("[ERR] Usage: ./ass3 [file-name]\n");
-    return 0;
+    return printErrorMessage(INVALID_ARG_COUNT_2);
   }
-  
-  file = fopen(argv[1], "r");
-  //fread(&cardType, sizeof(struct _Card_), 1, file);
-  
+
+  InitValues init_values = {0, 0, 0, 0};
+  ReturnValue return_value = readInitValuesFromPath(argv[1], &init_values);
+  if(return_value != EVERYTHING_OK)
+  {
+    return printErrorMessage(return_value);
+  }
+
+  function(init_values.a, init_values.b, init_values.c, init_values.d);
+
+  return 0;
+}
+
+//------------------------------------------------------------------------------
+///
+/// Print message which describes the return value.
+///
+/// @param return_value type of main return value
+///
+/// @return parameter return_value
+//
+ReturnValue printErrorMessage(ReturnValue return_value)
+{
+  switch(return_value)
+  {
+    case INVALID_ARG_COUNT_2:
+      printf("[ERR] Wrong number of parameters. Usage ./ass1 <config-file>\n");
+      break;
+    case INVALID_ARG_COUNT_3:
+      printf(
+        "[ERR] Wrong number of parameters. Usage ./ass1 <config-file> <matrikel-number>\n");
+      break;
+    case INVALID_FILE:
+      printf("[ERR] Config-File is invalid.\n");
+      break;
+    case FILE_NOT_FOUND:
+      printf("[ERR] Config-File does not exist or is not readable.\n");
+      break;
+    case INVALID_MATRIKEL_NUMBER:
+      printf("[ERR] Matrikel-Number is invalid.\n");
+      break;
+    case EVERYTHING_OK:
+      //left blank intentionally
+      break;
+  }
+  return return_value;
+}
+
+//------------------------------------------------------------------------------
+///
+/// read int as string followed by \n from file
+///
+/// @param file pointer to file to read from
+/// @param value pointer to store read value
+///
+/// @return type of error. 0 if success
+//
+ReturnValue readSingleValue(FILE* file, int* value)
+{
+  char str[10];
+  int read = fscanf(file, "%s\n", str);
+  if(read != 1)
+  {
+    return INVALID_FILE;
+  }
+
+  *value = (int)strtol(str, NULL, 10);
+  return EVERYTHING_OK;
+}
+
+//------------------------------------------------------------------------------
+///
+/// Read Initial values from file
+///
+/// @param file file to read from
+/// @param init_values struct to save read variables to
+///
+/// @return error type. 0 if success
+//
+ReturnValue readInitValuesFromFile(FILE* file, InitValues* init_values)
+{
+  int* variables[4] =
+    {&init_values->a, &init_values->b, &init_values->c, &init_values->d};
+
+  for(int variable_iterator = 0; variable_iterator < 4; variable_iterator++)
+  {
+    ReturnValue
+      return_value = readSingleValue(file, variables[variable_iterator]);
+    if(return_value != EVERYTHING_OK)
+    {
+      return return_value;
+    }
+  }
+
+  return EVERYTHING_OK;
+}
+
+//------------------------------------------------------------------------------
+///
+/// Read config values from path into struct
+///
+/// @param path relative path to file
+/// @param init_values struct to read values of file into
+///
+/// @return error type. 0 if success
+//
+ReturnValue readInitValuesFromPath(const char* path, InitValues* init_values)
+{
+  FILE* file = fopen(path, "r");
   if(file == NULL)
   {
-	printf("[ERR] could not read file!\n");
-    return 1;	
+    return FILE_NOT_FOUND;
   }
-  for(index = 0; index < 52; index++)
-  {
-    read = fscanf(file, "%s", &config[index]);
-  }
-  
+  ReturnValue read_return_value = readInitValuesFromFile(file, init_values);
+
   fclose(file);
+  return read_return_value;
+}
+
+//------------------------------------------------------------------------------
+///
+/// Function to be written by students. It calculates some values dependend on
+/// their matrikular number
+///
+/// @param a initial value a
+/// @param b initial value b
+/// @param c initial value c
+/// @param d initial value d
+///
+//
+void function(int a, int b, int c, int d)
+{
+  int result = 0;
+  // ----------------------------------------
+  // Beginn der Abgabe
+  // ----------------------------------------
   
-  if(read != 1)
-    printf("[ERR] Invalid file!\n");
+  if(a < 26)
+  {
+	while(b <= c)
+	{
+	  a += 2;
+	  b++;
+	  int sum = (b+c+d);
+	  sum = sum * 9;
+	  result = sum - 17;
+	  printf("%d %d %d %d\n", a, b, c, d);
+	  printf("%d\n",result);
+	  printf("--\n");
+	}
+  }
   else
-  {	
-    for(index = 0; index < 26; index++)
-    {	  
-      cards[index][0] = config[(index*2)][0];
-	  cards[index][1] = 0;
-      strcat(cards[index], config[((index*2)+1)]);
-    }
-  copyToDrawStack(cards);
+  {
+	while(a <= c)
+    {
+	  a += 2;
+	  b++;
+	  int sum = (b+c+d);
+	  sum = sum * 9;
+	  int result = sum - 17;
+	  printf("%d %d %d %d\n", a, b, c, d);
+	  printf("%d\n",result);
+	  printf("--\n");	
+	}
+  }
+  result = result * (a%2);
+  printf("%d %d %d %d\n", a, b, c, d);
+  printf("%d\n",result);
+  
+  // ----------------------------------------
+  // Ende der Abgabe
+  // ----------------------------------------
+}
+
+ for(i = 1; i < 26; i++)
+  {
+    struct _DrawStack_*temp2 = malloc(sizeof(struct _DrawStack_));
+    temp -> next= temp2;
+    temp2 -> card = array[i];
+    temp2 -> next = NULL;
+    temp = temp2;
+  }
+  
+
+void copyToStack1(char array[][4], int i)                        //copying array elements and create linked list
+{
+  
+  struct _Stack1_*head_1 = malloc(sizeof(struct _Stack1_));
+  
+  if(head_1 -> next != NULL)
+  {
+    head_1 -> card = array[i];
+    head_1 -> next = NULL;
+  }
+  else
+  {
+    struct _Stack1_*node = malloc(sizeof(struct _Stack1_));
+    head_1 -> next= node;
+    node -> card = array[i];
+    node -> next = NULL;
+    head_1 = node;
   }
   
 }

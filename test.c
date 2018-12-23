@@ -47,13 +47,97 @@ void table()
 {
   printf("0   | 1   | 2   | 3   | 4   | DEP | DEP\n");
   printf("---------------------------------------\n");
+  int i = 0;
+  //for(i = 16; i > 0; i--);
+  while( i < 16)
+  {
+	if(draw_ != NULL)
+	{
+      if(draw_ -> prev_ == NULL)
+	  {
+	    if(strcmp(draw_ -> card_, "B10") && strcmp(draw_ -> card_, "R10"))
+          printf("%s  |", draw_ -> card_);
+        else
+	      printf("%s |", draw_ -> card_);
+	  }
+	  else
+	    printf("X   |");
   
-  if(strcmp(draw_ -> card_, "B10") || strcmp(draw_ -> card_, "R10"))
-    printf(" %s  |", draw_ -> card_);
-  else
-	printf(" %s |", draw_ -> card_);
-  printf("X   |");
-  printf(" %s  | %s  | BJ  | B10 |     |    \n", stack_1_ -> card_, stack_2_ -> card_);
+      draw_ = draw_ -> next_;
+    }
+	else
+	  printf("    |");
+	
+	if(stack_1_ != NULL)
+	{
+	  if(strcmp(stack_1_ -> card_, "B10") && strcmp(stack_1_ -> card_, "R10"))
+        printf(" %s  |", stack_1_ -> card_);
+      else
+	    printf(" %s |", stack_1_ -> card_);
+	  stack_1_ = stack_1_ -> next_;
+	}
+	else
+	  printf("     |");
+  
+    if(stack_2_ != NULL)
+	{
+	  if(strcmp(stack_2_ -> card_, "B10") && strcmp(stack_2_ -> card_, "R10"))
+        printf(" %s  |", stack_2_ -> card_);
+      else
+	    printf(" %s |", stack_2_ -> card_);
+	  stack_2_ = stack_2_ -> next_;
+	}
+	else
+	  printf("     |");
+	
+	if(stack_3_ != NULL)
+	{
+	  if(strcmp(stack_3_ -> card_, "B10") && strcmp(stack_3_ -> card_, "R10"))
+        printf(" %s  |", stack_3_ -> card_);
+      else
+	    printf(" %s |", stack_3_ -> card_);
+	  stack_3_ = stack_3_ -> next_;
+	}
+	else
+	  printf("     |");
+  
+    if(stack_4_ != NULL)
+	{
+	  if(strcmp(stack_4_ -> card_, "B10") && strcmp(stack_4_ -> card_, "R10"))
+        printf(" %s  |", stack_4_ -> card_);
+      else
+	    printf(" %s |", stack_4_ -> card_);
+	  stack_4_ = stack_4_ -> next_;
+	}
+	else
+	  printf("     |");
+  
+    if(deposit_1_ != NULL)
+	{
+	  if(strcmp(deposit_1_ -> card_, "B10") && strcmp(deposit_1_ -> card_, "R10"))
+        printf(" %s  |", deposit_1_ -> card_);
+      else
+	    printf(" %s |", deposit_1_ -> card_);
+	  deposit_1_ = deposit_1_ -> next_;
+	}
+	else
+	  printf("     |");
+  
+    if(deposit_2_ != NULL)
+	{
+	  if(strcmp(deposit_2_ -> card_, "B10") && strcmp(deposit_2_ -> card_, "R10"))
+        printf(" %s  \n", deposit_2_ -> card_);
+      else
+	    printf(" %s \n", deposit_2_ -> card_);
+	  deposit_2_ = deposit_2_ -> next_;
+	}
+	else
+	  printf("     \n");
+	i++;
+  }
+  
+  // printf("X   |");
+  // printf(" %s  | %s  | BJ  | B10 |     |    \n", stack_1_ -> card_, stack_2_ -> card_);
 }
 
 void distribute(char array[][4])
@@ -228,6 +312,49 @@ void distribute(char array[][4])
   table();
 }
 
+void moveCard()
+{
+  	
+}
+
+void interpretUserInput()
+{
+  char input[25];
+  fgets(input, 25, stdin);
+  int i;
+  
+  char* segment1 = strtok(input, " ");
+
+  
+  if(strcmp(input, "help\n") == 0)
+  {	  
+    printf("possible command:\n");
+    printf("- move <color> <value> to <stacknumber>\n");
+    printf("- help\n");
+    printf("- exit\n");
+	input[0] = 0;
+	interpretUserInput();
+  }
+  else
+  {
+	if(strcmp(input, "exit\n") == 0)
+    {
+      return 0;
+	}
+	if(strcmp(segment1, "move") == 0)
+	{
+	  moveCard();	
+	}
+    else
+    {	
+      printf("[INFO] Invalid command!\n");
+      interpretUserInput();  
+    }
+  }
+  
+  
+}
+
 int main(int argc, char* argv[])
 {
   FILE *file;
@@ -252,7 +379,7 @@ int main(int argc, char* argv[])
   }
   for(index = 0; index < 52; index++)
   {
-    read = fscanf(file, "%s", &config[index]);
+    read = fscanf(file, "%s", config[index]);
   }
   
   fclose(file);
@@ -268,6 +395,7 @@ int main(int argc, char* argv[])
       strcat(cards[index], config[((index*2)+1)]);
     }
   distribute(cards);
+  interpretUserInput();
   }
   
 }
