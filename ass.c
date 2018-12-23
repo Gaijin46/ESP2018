@@ -47,13 +47,34 @@ void table()
 {
   printf("0   | 1   | 2   | 3   | 4   | DEP | DEP\n");
   printf("---------------------------------------\n");
+  int i = 0;
+  //for(i = 16; i > 0; i--);
+  while( i < 16)
+  {
+    if(draw_ -> prev_ == NULL)
+	{
+	  if(strcmp(draw_ -> card_, "B10") || strcmp(draw_ -> card_, "R10"))
+        printf("%s  |\n", draw_ -> card_);
+      else
+	    printf("%s|\n", draw_ -> card_);
+	}
+	else
+	  printf("X   |\n");
   
-  if(strcmp(draw_ -> card_, "B10") || strcmp(draw_ -> card_, "R10"))
-    printf(" %s  |", draw_ -> card_);
-  else
-	printf(" %s |", draw_ -> card_);
-  printf("X   |");
-  printf(" %s  | %s  | BJ  | B10 |     |    \n", stack_1_ -> card_, stack_2_ -> card_);
+    draw_ = draw_ -> next_;
+	i++;
+	// if(stack_1_ -> card_ != NULL)
+	  // if(strcmp(stack_1_ -> card_, "B10") || strcmp(stack_1_ -> card_, "R10"))
+        // printf(" %s  |", stack_1_ -> card_);
+      // else
+	    // printf(" %s |", stack_1_ -> card_);
+	// else
+	  // printf("    |");
+    // stack_1_ = stack_1_ -> next_;
+  }
+  
+  // printf("X   |");
+  // printf(" %s  | %s  | BJ  | B10 |     |    \n", stack_1_ -> card_, stack_2_ -> card_);
 }
 
 void distribute(char array[][4])
