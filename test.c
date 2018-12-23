@@ -18,42 +18,209 @@
 #include <string.h>
 #include<malloc.h>
 
-typedef enum _CardValue_
+struct _List_ {
+  char* card_;
+  struct _List_ * next_;
+  struct _List_ * prev_;
+};
+struct _List_ * draw_;
+struct _List_ * stack_1_;
+struct _List_ * stack_2_;
+struct _List_ * stack_3_;
+struct _List_ * stack_4_;
+struct _List_ * deposit_1_;
+struct _List_ * deposit_2_;
+
+void printlist()
 {
-  A = 1,
-  J = 11,
-  Q = 12,
-  K = 13
-} CardValue;
+  printf("List is : \n");
+  
+  while(draw_ != NULL)
+  {
+    printf(" %s \n",draw_ -> card_);
+    draw_ = draw_ -> next_;
+  }
+ printf("\n");
+}
 
-struct _DrawStack_ {
-    char* card;
-    struct DrawStack *next;
-}DrawStack;
-struct DrawStack draw;
-
-
-void distributeCards(char array[26][4])                         //copying array elements and create linked list
+void table()
 {
-  struct DrawStack*temp = malloc(sizeof(struct DrawStack));
-  temp -> card = array[0];
-  temp -> next = NULL;
-  draw = temp;
-  int i;
-  for(i = 0; i < 26; i++)
-  {
-      struct DrawStack* temp2 = malloc(sizeof(struct DrawStack));
-      temp -> next= temp2;
-      temp2 -> card = array[i];
-      temp2 -> next = NULL;
-      temp = temp2;
-  }
-	 
-  while(temp != NULL)
-  {
-    printf("%s\n",temp -> card);
-    temp = temp -> next;
-  }
+  printf("0   | 1   | 2   | 3   | 4   | DEP | DEP\n");
+  printf("---------------------------------------\n");
+  printf("X   |");
+  printf(" %s  | %s  | BJ  | B10 |     |    \n", stack_1_ -> card_, stack_2_ -> card_);
+}
+
+void distribute(char array[][4])
+{
+  struct _List_ * card_1_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_2_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_3_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_4_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_5_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_6_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_7_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_8_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_9_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_10_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_11_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_12_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_13_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_14_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_15_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_16_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_17_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_18_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_19_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_20_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_21_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_22_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_23_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_24_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_25_ = malloc(sizeof(struct _List_));
+  struct _List_ * card_26_ = malloc(sizeof(struct _List_));
+  
+  int i = 0;
+  
+  card_1_ -> card_ = array[i];
+  card_1_ -> prev_ = stack_1_;
+  card_1_ -> next_ = NULL;
+  i++;
+  
+  card_2_ -> card_ = array[i];
+  card_2_ -> prev_ = stack_2_;
+  card_2_ -> next_ = card_5_;
+  i++;
+  
+  card_3_ -> card_ = array[i];
+  card_3_ -> next_ = card_6_;
+  card_3_ -> prev_ = stack_3_;
+  i++;
+  
+  card_4_ -> card_ = array[i];
+  card_4_ -> next_ = card_7_;
+  card_4_ -> prev_ = stack_4_;
+  i++;
+  
+  card_5_ -> card_ = array[i];
+  card_5_ -> next_ = NULL;
+  card_5_ -> prev_ = card_2_;
+  i++;
+  
+  card_6_ -> card_ = array[i];
+  card_6_ -> next_ = card_8_;
+  card_6_ -> prev_ = card_3_;
+  i++;
+  
+  card_7_ -> card_ = array[i];
+  card_7_ -> next_ = card_9_;
+  card_7_ -> prev_ = card_4_;
+  i++;
+  
+  card_8_ -> card_ = array[i];
+  card_8_ -> next_ = NULL;
+  card_8_ -> prev_ = card_6_;
+  i++;
+  
+  card_9_ -> card_ = array[i];
+  card_9_ -> next_ = card_10_;
+  card_9_ -> prev_ = card_7_;
+  i++;
+  
+  card_10_ -> card_ = array[i];
+  card_10_ -> next_ = NULL;
+  card_10_ -> prev_ = card_9_;
+  i++;
+  
+  card_11_ -> card_ = array[i];
+  card_11_ -> next_ = card_12_;
+  card_11_ -> prev_ = draw_;
+  i++;
+  
+  card_12_ -> card_ = array[i];
+  card_12_ -> next_ = card_13_;
+  card_12_ -> prev_ = card_11_;
+  i++;
+  
+  card_13_ -> card_ = array[i];
+  card_13_ -> next_ = card_14_;
+  card_13_ -> prev_ = card_12_;
+  i++;
+  
+  card_14_ -> card_ = array[i];
+  card_14_ -> next_ = card_15_;
+  card_14_ -> prev_ = card_13_;
+  i++;
+  
+  card_15_ -> card_ = array[i];
+  card_15_ -> next_ = card_16_;
+  card_15_ -> prev_ = card_14_;
+  i++;
+  
+  card_16_ -> card_ = array[i];
+  card_16_ -> next_ = card_17_;
+  card_16_ -> prev_ = card_15_;
+  i++;
+  
+  card_17_ -> card_ = array[i];
+  card_17_ -> next_ = card_18_;
+  card_17_ -> prev_ = card_16_;
+  i++;
+  
+  card_18_ -> card_ = array[i];
+  card_18_ -> next_ = card_19_;
+  card_18_ -> prev_ = card_17_;
+  i++;
+  
+  card_19_ -> card_ = array[i];
+  card_19_ -> next_ = card_20_;
+  card_19_ -> prev_ = card_18_;
+  i++;
+  
+  card_20_ -> card_ = array[i];
+  card_20_ -> next_ = card_21_;
+  card_20_ -> prev_ = card_19_;
+  i++;
+  
+  card_21_ -> card_ = array[i];
+  card_21_ -> next_ = card_22_;
+  card_21_ -> prev_ = card_20_;
+  i++;
+  
+  card_22_ -> card_ = array[i];
+  card_22_ -> next_ = card_23_;
+  card_22_ -> prev_ = card_21_;
+  i++;
+  
+  card_23_ -> card_ = array[i];
+  card_23_ -> next_ = card_24_;
+  card_23_ -> prev_ = card_22_;
+  i++;
+  
+  card_24_ -> card_ = array[i];
+  card_24_ -> next_ = card_25_;
+  card_24_ -> prev_ = card_23_;
+  i++;
+  
+  card_25_ -> card_ = array[i];
+  card_25_ -> next_ = card_26_;
+  card_25_ -> prev_ = card_24_;
+  i++;
+  
+  card_26_ -> card_ = array[i];
+  card_26_ -> next_ = NULL;
+  card_26_ -> prev_ = card_25_;
+  i++;
+  
+  draw_ = card_11_;
+  stack_1_ = card_1_;
+  stack_2_ = card_2_;
+  stack_3_ = card_3_;
+  stack_4_ = card_4_;
+  deposit_1_ = NULL;
+  deposit_2_ = NULL;
+  //printlist();
+  table();
 }
 
 int main(int argc, char* argv[])
@@ -63,7 +230,6 @@ int main(int argc, char* argv[])
   char cards[26][4];
   int index;
   int read;
-  
   
   if(argc != 2)
   {
@@ -83,7 +249,9 @@ int main(int argc, char* argv[])
   {
     read = fscanf(file, "%s", &config[index]);
   }
-
+  
+  fclose(file);
+  
   if(read != 1)
     printf("[ERR] Invalid file!\n");
   else
@@ -94,15 +262,7 @@ int main(int argc, char* argv[])
 	  cards[index][1] = 0;
       strcat(cards[index], config[((index*2)+1)]);
     }
-  
-    //for(index = 0; index < 26; index++)
-    //{
-      //printf("%s\n", cards[index]);
-    //}
-	
-	distributeCards(cards);
+  distribute(cards);
   }
   
-
-  fclose(file);
 }

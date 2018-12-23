@@ -18,21 +18,16 @@
 #include <string.h>
 #include<malloc.h>
 
-struct _DrawStack_ {
+struct _List_ {
   char* card;
-  struct _DrawStack_ *next;
+  struct _List_ *next;
 };
-struct _DrawStack_*head_0;
+struct _List_*head_0;
+struct _List_*head_1;
 
-struct _Stack1_ {
-  char* card;
-  struct _Stack1_ *prev;
-  struct _Stack1_ *next;
-};
-struct _Stack1_*head_1;
-
-void printlist() {
-  struct _DrawStack_*node_0 = head_0;
+void printlist()
+{
+  struct _List_*node_0 = head_0;
   printf("List is : \n");
   
   while(node_0 != NULL)
@@ -43,23 +38,38 @@ void printlist() {
  printf("\n");
 }
 
+void distribute()
+{
+  struct _List_*node_0 = head_1;
+  head_1 -> next = node_0;
+  node_0 -> next = NULL;
+  
+  while(head_1 != NULL)
+  {	  
+    printf(" %s \n", head_1 -> card);	
+    
+  }
+}
+
 void copyToDrawStack(char array[][4])
 {
-  struct _DrawStack_*node_0 = malloc(sizeof(struct _DrawStack_));
+  struct _List_*node_0 = malloc(sizeof(struct _List_));
   node_0 -> card = array[0];
   node_0 -> next = NULL;
   head_0 = node_0;
   int i;
   for(i = 1; i < 26; i++)
   {
-	struct _DrawStack_*node_1 = malloc(sizeof(struct _DrawStack_));
+	struct _List_*node_1 = malloc(sizeof(struct _List_));
 	node_0 -> next = node_1;
 	node_1 -> card = array[i];
     node_1 -> next = NULL;
 	node_0 = node_1;
   }
-
+  head_1 = head_0;
+  //distribute();
   printlist();
+  
 }
 
 int main(int argc, char* argv[])
@@ -101,9 +111,7 @@ int main(int argc, char* argv[])
 	  cards[index][1] = 0;
       strcat(cards[index], config[((index*2)+1)]);
     }
-	copyToDrawStack(cards);
+  copyToDrawStack(cards);
   }
-  
-
   
 }
