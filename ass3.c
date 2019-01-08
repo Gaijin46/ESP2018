@@ -1,10 +1,8 @@
 //-----------------------------------------------------------------------------
 // ass3.c
 //
-// This program encrypts plain text. It it cycles each letter of the input
-// through the english alphabet, using the modulo of 256 divided 
-// by the input strings' length.
-// 
+// This program represents the classic game 'Solitaire'.
+// The order of the card is given by a config file. 
 // 
 // Group: Group 02, study assistant Martin Haubenwallner
 //
@@ -18,6 +16,7 @@
 #include <string.h>
 #include<malloc.h>
 
+// Structure for linked lists, represents the stacks.
 struct _List_ {
   char* card_;
   struct _List_ * next_;
@@ -31,8 +30,16 @@ struct _List_ * stack_4_;
 struct _List_ * deposit_1_;
 struct _List_ * deposit_2_;
 
-void printlist()
-{
+//------------------------------------------------------------------------------
+///
+/// Prints out the game table.
+/// Is refreshed after every turn.
+///
+///
+/// @param i counter
+///
+/// @return void function
+//
   printf("List is : \n");
   
   while(draw_ != NULL)
@@ -42,7 +49,6 @@ void printlist()
   }
  printf("\n");
 }
-
 void table()
 {
   printf("0   | 1   | 2   | 3   | 4   | DEP | DEP\n");
@@ -135,11 +141,19 @@ void table()
 	  printf("     \n");
 	i++;
   }
-  
-  // printf("X   |");
-  // printf(" %s  | %s  | BJ  | B10 |     |    \n", stack_1_ -> card_, stack_2_ -> card_);
 }
 
+//------------------------------------------------------------------------------
+///
+/// Distributes the cards onto the stacks at 
+/// the beginning of the game.
+///
+///
+/// @param card_x_ pointer used to create nodes inside the linked list.
+/// @param i counter
+///
+/// @return void function
+//
 void distribute(char array[][4])
 {
   struct _List_ * card_1_ = malloc(sizeof(struct _List_));
@@ -308,20 +322,69 @@ void distribute(char array[][4])
   stack_4_ = card_4_;
   deposit_1_ = NULL;
   deposit_2_ = NULL;
-  //printlist();
+
   table();
+  
+  free(card_1_);
+  free(card_2_);
+  free(card_3_);
+  free(card_4_);
+  free(card_5_);
+  free(card_6_);
+  free(card_7_);
+  free(card_8_);
+  free(card_9_);
+  free(card_10_);
+  free(card_11_);
+  free(card_12_);
+  free(card_13_);
+  free(card_14_);
+  free(card_15_);
+  free(card_16_);
+  free(card_17_);
+  free(card_18_);
+  free(card_19_);
+  free(card_20_);
+  free(card_21_);
+  free(card_22_);
+  free(card_23_);
+  free(card_24_);
+  free(card_25_);
+  free(card_26_);
 }
 
-void moveCard()
+//------------------------------------------------------------------------------
+///
+/// Moves cards from one stack to the other.
+///
+///
+/// @return void fuction
+//
+void moveCard(char* move)
 {
-  	
+  // int i = 0;
+  // while(i = 0)
+  // {
+    
+  // }
+// }
+  printf(" %s \n", move);
 }
 
+//------------------------------------------------------------------------------
+///
+/// Reads user input and interprets it.
+/// Compares input strings to allowed command strings.
+///
+/// @param input user input string
+/// @param segment1 segmented part of user input
+///
+/// @return void function
+//
 void interpretUserInput()
 {
   char input[25];
   fgets(input, 25, stdin);
-  int i;
   
   char* segment1 = strtok(input, " ");
 
@@ -339,11 +402,11 @@ void interpretUserInput()
   {
 	if(strcmp(input, "exit\n") == 0)
     {
-      return 0;
+      return;
 	}
 	if(strcmp(segment1, "move") == 0)
 	{
-	  moveCard();	
+	  moveCard(segment1);	
 	}
     else
     {	
@@ -355,6 +418,19 @@ void interpretUserInput()
   
 }
 
+//------------------------------------------------------------------------------
+///
+/// Main function opens config file, converts card format 
+/// and checks for validity.
+///
+/// @param file file pointer
+/// @param config initial array
+/// @param cards formatted cards array
+/// @param index counter
+/// @param read checks for valid file
+///
+/// @return depends on error
+//
 int main(int argc, char* argv[])
 {
   FILE *file;
@@ -370,7 +446,6 @@ int main(int argc, char* argv[])
   }
   
   file = fopen(argv[1], "r");
-  //fread(&cardType, sizeof(struct _Card_), 1, file);
   
   if(file == NULL)
   {
